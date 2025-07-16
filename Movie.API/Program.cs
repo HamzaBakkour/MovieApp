@@ -16,7 +16,7 @@ namespace Movie.API
 
 
             builder.Services.AddControllers()
-                            //.AddNewtonsoftJson()
+                            .AddNewtonsoftJson()
                             .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
             builder.Services.AddOpenApi();

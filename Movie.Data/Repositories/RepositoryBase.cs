@@ -27,8 +27,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false) =>
         !trackChanges ? DbSet.Where(expression).AsNoTracking() :
                         DbSet.Where(expression);
-
-    public void Create(T entity) => DbSet.Add(entity);
+    public async Task AddAsync(T entity) => await DbSet.AddAsync(entity);
 
     public void Update(T entity) => DbSet.Update(entity);
 
