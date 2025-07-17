@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Movie.Contracts;
+using Movie.Core;
 using Movie.Core.DomainContracts;
 using Movie.Core.DomainEntities;
 using Movie.Core.Dtos;
@@ -113,5 +114,17 @@ public class MovieService : IMovieService
     }
 
 
+    public async Task<PagedResult<MovieDto>> GetMoviesAsync(MoviePagingParametersDto parameters, bool trackChanges = false)
+    {
+        var pagedMovies = await uow.MovieRepository.GetPagedAsync(parameters, trackChanges);
 
+        var movieDtos = mapper.Map<List<MovieDto>>(pagedMovies);
+
+        return new PagedResult<MovieDto>(
+            movieDtos,
+            pagedMovies.TotalCount,
+            pagedMovies.CurrentPage,
+            pagedMovies.PageSize
+        );
+    }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Movie.Core.Dtos;
 
 namespace Movie.Core.DomainContracts;
 
@@ -15,5 +16,6 @@ public interface IRepositoryBase<T>
     Task AddAsync(T entity);
     void Update(T entity);
     void Delete(T entity);
+    Task<PagedResult<T>> GetPagedAsync(MoviePagingParametersDto parameters, bool trackChanges = false);
 
 }
