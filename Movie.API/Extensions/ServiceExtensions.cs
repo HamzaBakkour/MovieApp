@@ -41,6 +41,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IMovieRepository, MovieRepository>();
         services.AddScoped(provider => new Lazy<IMovieRepository>(() => provider.GetRequiredService<IMovieRepository>()));
+
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped(provider => new Lazy<IReviewRepository>(() => provider.GetRequiredService<IReviewRepository>()));
     }
 
     public static void AddServiceLayer(this IServiceCollection services)
@@ -49,6 +52,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IMovieService, MovieService>(); 
         services.AddScoped(provider => new Lazy<IMovieService>(() => provider.GetRequiredService<IMovieService>()));
+
+        services.AddScoped<IReviewService, ReviewService>();
+        services.AddScoped(provider => new Lazy<IReviewService>(() => provider.GetRequiredService<IReviewService>()));
     }
 
 }

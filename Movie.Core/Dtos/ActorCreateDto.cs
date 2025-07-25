@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-//using MovieApi.Validations;
+using Movie.Core.Validations;
 
 namespace Movie.Core.Dtos;
 
@@ -10,6 +10,6 @@ public class ActorCreateDto
     [StringLength(100)]
     public string Name { get; set; } = null!;
 
-    //[NotInTheFutureYear(1900)]
+    [NotInTheFutureYear(1900)]
     public int BirthYear { get; set; }
 }

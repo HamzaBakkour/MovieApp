@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Movie.Core.DomainContracts;
 
-public interface IUnitOfWork
+public interface IReviewRepository : IRepositoryBase<DomainEntities.Review>
 {
-    IMovieRepository MovieRepository { get; }
-    IReviewRepository ReviewRepository { get; }
-
-    Task CompleteAsync();
+    //Task<DomainEntities.Review?> GetAsync(int movieId, bool trackChanges = false);
 }

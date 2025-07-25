@@ -19,6 +19,8 @@ namespace Movie.API
                             .AddNewtonsoftJson()
                             .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
+
+
             builder.Services.AddOpenApi();
 
             builder.Services.AddRepositories();
@@ -29,12 +31,7 @@ namespace Movie.API
 
             var app = builder.Build();
 
-
-
-
-
-
-
+            app.ConfigureExceptionHandler();
 
 
 

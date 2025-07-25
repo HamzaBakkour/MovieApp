@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Movie.Core.DomainEntities;
 using Movie.Core.Dtos;
 
 
@@ -17,7 +18,8 @@ public class MapperProfile : Profile
             .ForMember(dest => dest.Reviews, opt => opt.Ignore())
             .ForMember(dest => dest.Actors, opt => opt.Ignore())
             .ForMember(dest => dest.Genres, opt => opt.Ignore());
-        CreateMap<Core.DomainEntities.Movie, MoviePatchDto>().ReverseMap();
+        CreateMap<Core.DomainEntities.Movie, MoviePatchDto>()
+            .ForMember(dest => dest.Detailes, opt => opt.MapFrom(src => src.Detailes));
         CreateMap<Core.DomainEntities.Movie, MovieAllDetailsDto>()
             .AfterMap((src, dest) =>
             {
@@ -30,14 +32,17 @@ public class MapperProfile : Profile
                 if (src.Reviews?.Count == 0)
                     dest.Reviews = null;
             });
+        CreateMap<MoviePatchDto, Core.DomainEntities.Movie>().ForMember(dest => dest.Detailes, opt => opt.Ignore());
+        CreateMap<MovieDetailes, MovieDetailesDto>();
+        CreateMap<MovieDetailes, MovieDetailesCreateDto>().ReverseMap();
+        CreateMap<MovieDetailes, MovieDetailesPatchDto>().ReverseMap();
 
-        CreateMap<Core.DomainEntities.MovieDetailes, MovieDetailesDto>();
-        CreateMap<Core.DomainEntities.MovieDetailes, MovieDetailesCreateDto>().ReverseMap();
+        CreateMap<Actor, ActorDto>();
 
-        CreateMap<Core.DomainEntities.Actor, ActorDto>();
+        CreateMap<Genre, GenreDto>();
 
-        CreateMap<Core.DomainEntities.Genre, GenreDto>();
-
-        CreateMap<Core.DomainEntities.Review, ReviewDto>();
+        CreateMap<Review, ReviewDto>();
+        CreateMap<ReviewCreateDto, Review>();
+        CreateMap<Review, ReviewDetailsDto>();
     }
 }

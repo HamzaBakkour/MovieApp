@@ -17,7 +17,7 @@ public interface IMovieService
     Task<MovieDto> AddMovieAsync(MovieCreateDto dto, bool trackChanges = false);
     Task<MovieDto> DeleteMovieAsync(int id, bool trackChanges = false);
     Task<MovieDto> UpdateMovieAsync(int id, MovieUpdateDto dto, bool trackChanges = false);
-    Task<MovieDto> PatchMovieAsync(int id, JsonPatchDocument<MoviePatchDto> patchDoc, bool trackChanges = false);
+    Task<MovieAllDetailsDto> PatchMovieAsync(int id, JsonPatchDocument<MoviePatchDto> patchDoc, bool trackChanges = false);
     Task<PagedResult<MovieDto>> GetMoviesAsync(MoviePagingParametersDto parameters, bool trackChanges = false);
 
 }

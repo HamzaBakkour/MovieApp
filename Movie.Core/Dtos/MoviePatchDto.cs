@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Movie.Core.Dtos;
+﻿namespace Movie.Core.Dtos;
 
 public class MoviePatchDto
 {
     public string? Title { get; set; }
     public int? Year { get; set; }
+    public MovieDetailesPatchDto? Detailes { get; set; }
 }

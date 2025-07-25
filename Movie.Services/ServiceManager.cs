@@ -10,16 +10,23 @@ namespace Movie.Services;
 public class ServiceManager : IServiceManager
 {
 
-    private Lazy<IMovieService> movieService;
+    private Lazy<IMovieService> _movieService;
+    private Lazy<IReviewService> _reviewService;
 
-    public IMovieService MovieService => movieService.Value;
+
+    public IMovieService MovieService => _movieService.Value;
+    public IReviewService ReviewService => _reviewService.Value;
+
 
     //..
     //..
     //..
 
-    public ServiceManager(Lazy<IMovieService> movieService)
+    public ServiceManager(Lazy<IMovieService> movieService,
+                            Lazy<IReviewService> reviewService)
     {
-        this.movieService = movieService;
+        this._movieService = movieService;
+        this._reviewService = reviewService;
+
     }
 }

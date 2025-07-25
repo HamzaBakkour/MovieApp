@@ -16,6 +16,11 @@ public class MovieRepository : RepositoryBase<Core.DomainEntities.Movie>, IMovie
     public async Task<Core.DomainEntities.Movie?> GetAsync(int id, bool trackChanges = false) =>
                                                             await FindByCondition(m => m.Id == id, trackChanges).FirstOrDefaultAsync();
 
+    public async Task<Core.DomainEntities.Movie?> GetReviewsAsync(int id, bool trackChanges = false) =>
+                                                        await FindByCondition(m => m.Id == id, trackChanges)
+                                                                .Include(m => m.Reviews)
+                                                                .FirstOrDefaultAsync();
+
     public async Task<bool> AnyAsync(int id, bool trackChanges = false) =>
                                                             await FindByCondition(m => m.Id == id, trackChanges).AnyAsync();
 

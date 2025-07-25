@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-//using MovieApi.Validations;
+using Movie.Core.Validations;
 
 namespace Movie.Core.Dtos;
 
@@ -10,7 +10,7 @@ public class MovieUpdateDto
     [StringLength(150)]
     public string Title { get; set; } = null!;
 
-    //[NotInTheFutureYear(1800)]
+    [NotInTheFutureYear(1800)]
     public int Year { get; set; }
 
     [Range(1, 600)]
