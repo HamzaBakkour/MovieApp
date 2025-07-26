@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Movie.Contracts;
+using Movie.Core;
 using Movie.Core.DomainContracts;
 using Movie.Core.DomainEntities;
 using Movie.Core.Dtos;
@@ -37,7 +38,7 @@ public class ReviewService : IReviewService
 
     }
 
-    public async Task<ReviewDto> AddReviewAsync(int movieId, ReviewCreateDto dto, bool trackChanges = false)
+    public async Task<ReviewDto> AddReviewAsync(int movieId, ReviewCreateDto dto, bool trackChanges = true)
     {
 
         var movie = await uow.MovieRepository.GetReviewsAsync(movieId, trackChanges);
@@ -57,12 +58,23 @@ public class ReviewService : IReviewService
 
     }
 
-    public async Task<IEnumerable<ReviewDetailsDto>> GetReviewsAsync(int movieId, bool trackChanges = false)
+    public async Task<PagedResult<ReviewDetailsDto>> GetReviewsAsync(int movieId, ReviewPagingParametersDto parameters, bool trackChanges = false)
     {
-        var movie = await uow.MovieRepository.GetReviewsAsync(movieId, trackChanges);
+        var movieExists = await uow.MovieRepository.AnyAsync(movieId, trackChanges);
+        if (!movieExists)
+            throw new MovieNotFoundException(movieId);
 
-        if (movie == null) throw new MovieNotFoundException(movieId);
+        var pagedReviews = await uow.ReviewRepository.GetPagedReviewsAsync(movieId, parameters.PageNumber, parameters.PageSize, trackChanges);
 
-        return mapper.Map<IEnumerable<ReviewDetailsDto>>(movie.Reviews);
+        var reviewDtos = mapper.Map<List<ReviewDetailsDto>>(pagedReviews);
+
+        return new PagedResult<ReviewDetailsDto>(
+            reviewDtos,
+            pagedReviews.TotalCount,
+            pagedReviews.CurrentPage,
+            pagedReviews.PageSize
+        );
     }
+
+
 }

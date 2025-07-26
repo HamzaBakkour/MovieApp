@@ -62,7 +62,7 @@ public class ActorService : IActorService
 
 
 
-    public async Task<ActorDto> AddActorToMovieAsync(int movieId, int actorId,bool trackChanges = false)
+    public async Task<ActorDto> AddActorToMovieAsync(int movieId, int actorId,bool trackChanges = true)
     {
         var movie = await uow.MovieRepository.GetDetailsAsync(movieId, trackChanges);
         if (movie is null) throw new MovieNotFoundException(movieId);

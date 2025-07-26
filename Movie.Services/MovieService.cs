@@ -113,7 +113,7 @@ public class MovieService : IMovieService
     }
 
 
-    public async Task<MovieDto> DeleteMovieAsync(int id, bool trackChanges = false)
+    public async Task<MovieDto> DeleteMovieAsync(int id, bool trackChanges = true)
     {
         var movie = await uow.MovieRepository.GetAsync(id, trackChanges);
 
@@ -128,7 +128,7 @@ public class MovieService : IMovieService
     }
 
 
-    public async Task<MovieDto> UpdateMovieAsync(int id, MovieUpdateDto dto, bool trackChanges = false)
+    public async Task<MovieDto> UpdateMovieAsync(int id, MovieUpdateDto dto, bool trackChanges = true)
     {
         var movie = await uow.MovieRepository.GetAsync(id, trackChanges);
 
@@ -144,7 +144,7 @@ public class MovieService : IMovieService
     }
 
 
-    public async Task<MovieAllDetailsDto> PatchMovieAsync(int id, JsonPatchDocument<MoviePatchDto> patchDoc, bool trackChanges = false)
+    public async Task<MovieAllDetailsDto> PatchMovieAsync(int id, JsonPatchDocument<MoviePatchDto> patchDoc, bool trackChanges = true)
     {
         var movie = await uow.MovieRepository.GetDetailsAsync(id, trackChanges);
         if (movie is null) throw new MovieNotFoundException(id);
