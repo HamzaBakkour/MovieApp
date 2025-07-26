@@ -24,6 +24,14 @@ public class MovieRepository : RepositoryBase<Core.DomainEntities.Movie>, IMovie
     public async Task<bool> AnyAsync(int id, bool trackChanges = false) =>
                                                             await FindByCondition(m => m.Id == id, trackChanges).AnyAsync();
 
+    public async Task<bool> TitleExistsAsync(string title, int excludeMovieId = 0, bool trackChanges = false)
+    {
+        return await FindByCondition(
+            m => m.Title.ToLower() == title.ToLower() && m.Id != excludeMovieId,
+            trackChanges
+        ).AnyAsync();
+    }
+
     public async Task<Core.DomainEntities.Movie?> GetDetailsAsync(int id, bool trackChanges = false) =>
                                                             await FindByCondition(m => m.Id == id, trackChanges)
                                                                     .Include(m => m.Actors)

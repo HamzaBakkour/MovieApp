@@ -18,4 +18,9 @@ public class MovieCreateDto
 
     [Required]
     public MovieDetailesCreateDto Detailes { get; set; } = null!;
+
+    [Required]
+    [MinLength(1, ErrorMessage = "At least one genre is required.")]
+    public List<int> GenreIds { get; set; } = new();
+
 }

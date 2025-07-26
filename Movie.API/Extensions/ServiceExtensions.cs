@@ -44,6 +44,12 @@ public static class ServiceExtensions
 
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped(provider => new Lazy<IReviewRepository>(() => provider.GetRequiredService<IReviewRepository>()));
+
+        services.AddScoped<IActorRepository, ActorRepository>();
+        services.AddScoped(provider => new Lazy<IActorRepository>(() => provider.GetRequiredService<IActorRepository>()));
+
+        services.AddScoped<IGenreRepository, GenreRepository>();
+        services.AddScoped(provider => new Lazy<IGenreRepository>(() => provider.GetRequiredService<IGenreRepository>()));
     }
 
     public static void AddServiceLayer(this IServiceCollection services)
@@ -55,6 +61,13 @@ public static class ServiceExtensions
 
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped(provider => new Lazy<IReviewService>(() => provider.GetRequiredService<IReviewService>()));
+
+        services.AddScoped<IActorService, ActorService>();
+        services.AddScoped(provider => new Lazy<IActorService>(() => provider.GetRequiredService<IActorService>()));
+
+        services.AddScoped<IGenreService, GenreService>();
+        services.AddScoped(provider => new Lazy<IGenreService>(() => provider.GetRequiredService<IGenreService>()));
+
     }
 
 }

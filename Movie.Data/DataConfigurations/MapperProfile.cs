@@ -37,9 +37,13 @@ public class MapperProfile : Profile
         CreateMap<MovieDetailes, MovieDetailesCreateDto>().ReverseMap();
         CreateMap<MovieDetailes, MovieDetailesPatchDto>().ReverseMap();
 
+
         CreateMap<Actor, ActorDto>();
+        CreateMap<Actor, ActorCreateDto>().ReverseMap(); ;
+
 
         CreateMap<Genre, GenreDto>();
+
 
         CreateMap<Review, ReviewDto>();
         CreateMap<ReviewCreateDto, Review>();

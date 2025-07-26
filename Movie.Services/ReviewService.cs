@@ -24,7 +24,7 @@ public class ReviewService : IReviewService
         this.mapper = mapper;
     }
 
-    private bool BusinessRulesValidation( Core.DomainEntities.Movie movie) {
+    private void BusinessRulesValidation( Core.DomainEntities.Movie movie) {
 
         int currentYear = DateTime.UtcNow.Year;
         int movieAge = currentYear - movie.Year;
@@ -34,8 +34,6 @@ public class ReviewService : IReviewService
             throw new MovieExceededMaxReviewsException(movie.Id, 5);
         if (reviewCount > 10)
             throw new MovieExceededMaxReviewsException(movie.Id, 10);
-
-        return true;
 
     }
 
@@ -47,7 +45,6 @@ public class ReviewService : IReviewService
         if (movie == null) throw new MovieNotFoundException(movieId);
 
         BusinessRulesValidation(movie);
-            
 
         var reviewEntity = mapper.Map<Review>(dto);
         reviewEntity.MovieId = movieId;

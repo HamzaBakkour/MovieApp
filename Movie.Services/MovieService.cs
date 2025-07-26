@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using Movie.Contracts;
 using Movie.Core;
 using Movie.Core.DomainContracts;
@@ -21,6 +22,45 @@ public class MovieService : IMovieService
     {
         this.uow = uow;
         this.mapper = mapper;
+    }
+
+
+    private async Task SharedBusinessRulesValidation(Core.DomainEntities.Movie movie, bool trackChanges)
+    {
+        /// Rule 1: A Documentary movie budget can not exceed 1_000_000
+        bool isDocumentary = movie.Genres.Any(g =>
+            string.Equals(g.Name, "Documentary", StringComparison.OrdinalIgnoreCase));
+
+        if (isDocumentary && movie.Detailes.Budget > 1_000_000)
+            throw new MovieExceededBudgetException(1_000_000, "Documentary");
+
+        /// Rule 2: There cannot be two movies with the same title
+        bool titleExists = await uow.MovieRepository.TitleExistsAsync(movie.Title, movie.Id, trackChanges);
+        if (titleExists)
+            throw new MovieAlreadyExistException(movie.Title);
+    }
+
+
+    private async Task BusinessRulesValidation(
+        Core.DomainEntities.Movie movie,
+        List<int> genreIds,
+        List<Genre> fetchedGenres,
+        bool trackChanges = false)
+    {
+        /// Rule 1 and Rule 2
+        await SharedBusinessRulesValidation(movie, trackChanges);
+
+        /// Rule 3: All submitted genre IDs must exist
+        var fetchedIds = fetchedGenres.Select(g => g.Id).ToList();
+        var invalidIds = genreIds.Except(fetchedIds).ToList();
+
+        if (invalidIds.Any())
+            throw new InvaildGenreException(string.Join(", ", invalidIds));
+    }
+
+    private async Task BusinessRulesValidation(Core.DomainEntities.Movie movie, bool trackChanges = false)
+    {
+        await SharedBusinessRulesValidation(movie, trackChanges);
     }
 
 
@@ -53,15 +93,23 @@ public class MovieService : IMovieService
     public async Task<MovieDto> AddMovieAsync(MovieCreateDto dto, bool trackChanges = false)
     {
         var movieEntity = mapper.Map<Core.DomainEntities.Movie>(dto);
-        var movieDetailsEntity = mapper.Map<MovieDetailes>(dto.Detailes);
-        movieEntity.Detailes = movieDetailsEntity;
+        movieEntity.Detailes = mapper.Map<MovieDetailes>(dto.Detailes);
+
+        if (dto.GenreIds?.Any() != true)
+            throw new GenreRequiredException(); 
+
+        var genres = await uow.GenreRepository
+                              .FindByCondition(g => dto.GenreIds.Contains(g.Id), trackChanges: true)
+                              .ToListAsync();
+
+        movieEntity.Genres = genres;
+
+        await BusinessRulesValidation(movieEntity, dto.GenreIds, genres, trackChanges);
 
         await uow.MovieRepository.AddAsync(movieEntity);
-
         await uow.CompleteAsync();
 
         return mapper.Map<MovieDto>(movieEntity);
-
     }
 
 
@@ -88,6 +136,8 @@ public class MovieService : IMovieService
 
         mapper.Map(dto, movie);
 
+        await BusinessRulesValidation(movie);
+
         uow.MovieRepository.Update(movie);
         await uow.CompleteAsync();
         return mapper.Map<MovieDto>(movie);
@@ -103,6 +153,7 @@ public class MovieService : IMovieService
 
         movieToPatch.Detailes ??= new MovieDetailesPatchDto();
 
+
         patchDoc.ApplyTo(movieToPatch);
 
         mapper.Map(movieToPatch, movie);
@@ -111,6 +162,8 @@ public class MovieService : IMovieService
         {
             mapper.Map(movieToPatch.Detailes, movie.Detailes);
         }
+
+        await BusinessRulesValidation(movie);
 
         uow.MovieRepository.Update(movie);
         await uow.CompleteAsync();

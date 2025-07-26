@@ -9,4 +9,6 @@ public interface IMovieRepository : IRepositoryBase<DomainEntities.Movie>
     Task<Core.DomainEntities.Movie?> GetReviewsAsync(int id, bool trackChanges = false);
     Task<bool> AnyAsync(int id, bool trackChanges = false);
     Task<DomainEntities.Movie?> GetDetailsAsync(int id, bool trackChanges = false);
+
+    Task<bool> TitleExistsAsync(string title, int excludeMovieId = 0, bool trackChanges = false);
 }
