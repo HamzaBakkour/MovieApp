@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movie.API", "Movie.API\Movie.API.csproj", "{4F61C78B-ED64-4828-817D-A200DD5B4055}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movie.Contracts", "Movie.Contracts\Movie.Contracts.csproj", "{561DF7B7-663A-497F-A620-D8DA51339BED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movie.Core", "Movie.Core\Movie.Core.csproj", "{A3DE8299-35A2-4674-9C8B-1681D5F5D38E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{803B7A3F-D478-4AB3-AA3C-A0787FA22CCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller.Tests", "Controller.Tests\Controller.Tests.csproj", "{B7409A34-97A7-4096-9E0A-10407D0EDE73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +51,22 @@ Global
 		{A3DE8299-35A2-4674-9C8B-1681D5F5D38E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3DE8299-35A2-4674-9C8B-1681D5F5D38E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3DE8299-35A2-4674-9C8B-1681D5F5D38E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7409A34-97A7-4096-9E0A-10407D0EDE73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7409A34-97A7-4096-9E0A-10407D0EDE73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7409A34-97A7-4096-9E0A-10407D0EDE73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7409A34-97A7-4096-9E0A-10407D0EDE73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F61C78B-ED64-4828-817D-A200DD5B4055} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{1E4F7D9D-C8D7-44B5-97AF-27F08C61DFDD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{1AB555E4-747B-44DC-B26E-F06A9B66A9F5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{452ECC14-5BCC-40A4-AD88-956D1F65314D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{561DF7B7-663A-497F-A620-D8DA51339BED} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A3DE8299-35A2-4674-9C8B-1681D5F5D38E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B7409A34-97A7-4096-9E0A-10407D0EDE73} = {803B7A3F-D478-4AB3-AA3C-A0787FA22CCB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78B33A1F-121D-4713-B6E6-403B926DAAE8}
