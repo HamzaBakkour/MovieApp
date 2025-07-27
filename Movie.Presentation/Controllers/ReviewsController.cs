@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Movie.Contracts;
 using Movie.Core.Dtos;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Movie.Presentation.Controllers;
 
@@ -23,14 +24,19 @@ public class ReviewsController : ControllerBase
 
 
     [HttpPost("/api/movies/{movieId}/reviews")]
+    [SwaggerOperation(Summary = "Add review to a movie", Description = "Add review to an existing movie.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ReviewDetailsDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ReviewDetailsDto>> PostReview([FromRoute, Range(0, int.MaxValue)] int movieId, [FromBody] ReviewCreateDto dto)
     {
         var response = await serviceManager.ReviewService.AddReviewAsync(movieId, dto);
-        /// TODO: return CreatedAtAction(nameof(GetMovieReviews), new { movieId = movie.Id }, response);
-        return Ok(response);
+        return Created(string.Empty, response);
     }
 
     [HttpGet("/api/movies/{movieId}/reviews")]
+    [SwaggerOperation(Summary = "Get all reviews", Description = "Gets all reviews.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReviewDetailsDto>))]
     public async Task<ActionResult<IEnumerable<ReviewDetailsDto>>> GetReviews(
         [FromRoute] int movieId,
         [FromQuery] ReviewPagingParametersDto parameters)

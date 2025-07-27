@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Builder;
 using Movie.API.Extensions;
 using Movie.API.Services;
 using Movie.Data.DataConfigurations;
@@ -20,9 +21,15 @@ namespace Movie.API
                             .AddNewtonsoftJson()
                             .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.EnableAnnotations();
+            });
 
 
-            builder.Services.AddOpenApi();
+
+
+            //builder.Services.AddOpenApi();
 
             builder.Services.AddRepositories();
             builder.Services.AddServiceLayer();
@@ -41,7 +48,14 @@ namespace Movie.API
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                //app.MapOpenApi();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(opt =>
+                {
+                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                });
+
             }
 
             app.UseHttpsRedirection();

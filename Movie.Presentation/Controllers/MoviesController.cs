@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Movie.Contracts;
 using Movie.Core.Dtos;
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace MovieApi.Controllers;
 
 [Route("api/movies")]
@@ -25,11 +27,9 @@ public class MoviesController : ControllerBase
 
 
 
-    //[HttpGet]
-    //public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies() =>
-    //                                      Ok(await serviceManager.MovieService.GetMoviesAsync());
-
     [HttpGet]
+    [SwaggerOperation(Summary = "Get all movies", Description = "Gets all movies.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MovieDto>))]
     public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies([FromQuery] MoviePagingParametersDto parameters)
     {
         var pagedResult = await serviceManager.MovieService.GetMoviesAsync(parameters);
@@ -48,23 +48,37 @@ public class MoviesController : ControllerBase
         return Ok(pagedResult);
     }
 
+
     [HttpGet("{id}")]
+    [SwaggerOperation(Summary = "Get movie by ID", Description = "Returns full details of a movie.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieAllDetailsDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<MovieDto>> GetMovie([FromRoute, Range(0, int.MaxValue)] int id) =>
         Ok(await serviceManager.MovieService.GetMovieAsync(id));
 
 
 
     [HttpGet("{id}/details")]
+    [SwaggerOperation(Summary = "Get movie detiales by ID", Description = "Returns full details of a movie.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieAllDetailsDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<MovieAllDetailsDto>> GetMovieDetails([FromRoute, Range(0, int.MaxValue)] int id) =>
                                                     Ok(await serviceManager.MovieService.GetMovieDetailsAsync(id));
 
 
     [HttpPut("{id}")]
+    [SwaggerOperation(Summary = "Update movie", Description = "Updates an existing movie by ID.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> PutMovie([FromRoute, Range(0, int.MaxValue)] int id, [FromBody] MovieUpdateDto dto) =>
                                                     Ok(await serviceManager.MovieService.UpdateMovieAsync(id, dto));
 
 
     [HttpPost]
+    [SwaggerOperation(Summary = "Create movie", Description = "Creates a new movie.")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(MovieDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<MovieDto>> PostMovie([FromBody] MovieCreateDto dto)
     {
         var response = await serviceManager.MovieService.AddMovieAsync(dto);
@@ -73,6 +87,9 @@ public class MoviesController : ControllerBase
 
 
     [HttpDelete("{id}")]
+    [SwaggerOperation(Summary = "Delete movie", Description = "Deletes a movie by ID.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteMovie([FromRoute, Range(0, int.MaxValue)] int id)
     {
         //var response = await serviceManager.MovieService.DeleteMovieAsync(id);
@@ -81,6 +98,10 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPatch("{id}")]
+    [SwaggerOperation(Summary = "Patch movie", Description = "Patch a movie by ID.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieUpdateDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> PatchMovie([FromRoute, Range(0, int.MaxValue)] int id, [FromBody] JsonPatchDocument<MoviePatchDto> patchDoc)
     {
         if (patchDoc is null)
