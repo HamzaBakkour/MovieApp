@@ -1,5 +1,6 @@
 
 using Movie.API.Extensions;
+using Movie.API.Services;
 using Movie.Data.DataConfigurations;
 using Movie.Presentation;
 
@@ -26,6 +27,7 @@ namespace Movie.API
             builder.Services.AddRepositories();
             builder.Services.AddServiceLayer();
 
+            builder.Services.AddHostedService<DataSeedHostingService>();
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             builder.Services.ConfigureCors();
 
